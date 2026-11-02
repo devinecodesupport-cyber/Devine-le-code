@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DEVINE LE CODE – Trouve le code secret, gagne ta récompense</title>
+<meta name="description" content="DEVINE LE CODE : le jeu où tu trouves un code secret à 4 chiffres grâce aux indices pour gagner une récompense. Sur mobile et sur le web.">
+<style>
+  :root {
+    color-scheme: dark light;
+    --bg: #0B0B0C;
+    --surface: #151517;
+    --line: #2B2B2E;
+    --ink: #F6F2E9;
+    --muted: #A9A59A;
+    --gold: #D9AE3F;
+    --gold-ink: #17120A;
+    --font-display: "Iowan Old Style", "Palatino Linotype", Georgia, serif;
+    --font-ui: "Avenir Next", "Segoe UI", system-ui, -apple-system, sans-serif;
+    --font-digit: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  }
+  @media (prefers-color-scheme: light) {
+    :root {
+      --bg: #FBF8F1;
+      --surface: #FFFFFF;
+      --line: #E2DACA;
+      --ink: #17120A;
+      --muted: #6B6558;
+      --gold: #A97C12;
+      --gold-ink: #FFFFFF;
+    }
+  }
+
+  * { box-sizing: border-box; margin: 0; }
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+  body { background: var(--bg); color: var(--ink); font-family: var(--font-ui); line-height: 1.6; }
+  a { color: inherit; }
+  .wrap { width: min(1040px, 100% - 32px); margin-inline: auto; }
+
+  /* En-tête */
+  header { border-bottom: 1px solid var(--line); }
+  .bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 0; }
+  .logo { font-family: var(--font-display); font-weight: 700; letter-spacing: 0.06em; text-decoration: none; font-size: 1.05rem; }
+  .logo b { color: var(--gold); font-weight: 700; }
+  nav { display: none; gap: 24px; font-size: 0.95rem; color: var(--muted); }
+  nav a { text-decoration: none; }
+  nav a:hover { color: var(--ink); }
+  @media (min-width: 760px) { nav { display: flex; } }
+
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-height: 46px; padding: 0 22px; border-radius: 999px;
+    font: inherit; font-weight: 700; text-decoration: none; cursor: pointer;
+    background: var(--gold); color: var(--gold-ink); border: 2px solid var(--gold);
+  }
+  .btn:hover { filter: brightness(1.08); }
+  .btn.ghost { background: transparent; color: var(--ink); border-color: var(--line); }
+  .btn.ghost:hover { border-color: var(--gold); }
+  .btn.small { min-height: 40px; padding: 0 18px; font-size: 0.92rem; }
+  a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
+
+  /* Héros */
+  .hero { padding: 56px 0 64px; text-align: center; }
+  .eyebrow { color: var(--gold); font-size: 0.85rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; }
+  h1 { font-family: var(--font-display); font-size: clamp(2.3rem, 8vw, 4.2rem); line-height: 1.08; letter-spacing: -0.01em; margin-top: 14px; }
+  h1 em { color: var(--gold); font-style: normal; }
+  .lead { color: var(--muted); font-size: 1.08rem; max-width: 34rem; margin: 18px auto 0; }
+  .cta { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 28px; }
+
+  .code { display: flex; justify-content: center; gap: 10px; margin-top: 44px; }
+  .slot {
+    width: clamp(52px, 16vw, 76px); aspect-ratio: 3 / 4;
+    display: grid; place-items: center;
+    border: 2px solid var(--gold); border-radius: 14px; background: var(--surface);
+    font-family: var(--font-digit); font-size: clamp(1.8rem, 7vw, 2.8rem); font-weight: 700; color: var(--gold);
+    animation: glow 3.2s ease-in-out infinite;
+  }
+  .slot:nth-child(2) { animation-delay: 0.4s; }
+  .slot:nth-child(3) { animation-delay: 0.8s; }
+  .slot:nth-child(4) { animation-delay: 1.2s; }
+  @keyframes glow {
+    0%, 100% { box-shadow: 0 0 0 0 transparent; }
+    50% { box-shadow: 0 0 26px 0 color-mix(in srgb, var(--gold) 45%, transparent); }
+  }
+  .code-note { margin-top: 14px; font-size: 0.85rem; color: var(--muted); }
+
+  /* Sections */
+  section { padding: 56px 0; border-top: 1px solid var(--line); }
+  h2 { font-family: var(--font-display); font-size: clamp(1.7rem, 5vw, 2.4rem); line-height: 1.15; }
+  .sub { color: var(--muted); margin-top: 8px; max-width: 36rem; }
+  .grid { display: grid; gap: 14px; margin-top: 28px; }
+  @media (min-width: 760px) { .grid.three { grid-template-columns: repeat(3, 1fr); } .grid.two { grid-template-columns: repeat(2, 1fr); } }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 22px; }
+  .card h3 { font-size: 1.1rem; margin-top: 10px; }
+  .card p { color: var(--muted); margin-top: 6px; font-size: 0.97rem; }
+  .num { font-family: var(--font-digit); color: var(--gold); font-weight: 700; font-size: 1.5rem; }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
+  .chip { border: 1px solid var(--line); background: var(--surface); border-radius: 999px; padding: 9px 18px; font-weight: 600; }
+  .fine { color: var(--muted); font-size: 0.9rem; margin-top: 14px; }
+
+  /* FAQ */
+  details { border-bottom: 1px solid var(--line); padding: 4px 0; }
+  summary { cursor: pointer; list-style: none; padding: 16px 28px 16px 0; font-weight: 600; position: relative; }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: "+"; position: absolute; right: 4px; top: 12px; color: var(--gold); font-size: 1.5rem; }
+  details[open] summary::after { content: "–"; }
+  details p { color: var(--muted); padding: 0 0 16px; }
+  .faq { margin-top: 24px; }
+
+  /* Appel final */
+  .final { text-align: center; }
+  .final .cta { margin-top: 24px; }
+
+  footer { border-top: 1px solid var(--line); padding: 28px 0 40px; color: var(--muted); font-size: 0.9rem; }
+  .foot { display: flex; flex-wrap: wrap; gap: 10px 24px; justify-content: space-between; }
+  .foot nav { display: flex; gap: 18px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .slot { animation: none; }
+    html { scroll-behavior: auto; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap bar">
+    <a class="logo" href="#top">DEVINE <b>LE CODE</b></a>
+    <nav aria-label="Navigation principale">
+      <a href="#comment">Comment jouer</a>
+      <a href="#avantages">Avantages</a>
+      <a href="#paiement">Paiement</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <a class="btn small" href="#" data-app>Jouer</a>
+  </div>
+</header>
+
+<main id="top">
+  <div class="wrap hero">
+    <p class="eyebrow">Le jeu du code secret</p>
+    <h1>Trouve le code.<br><em>Décroche la récompense.</em></h1>
+    <p class="lead">Un code à 4 chiffres est caché. Utilise les indices, réfléchis, et sois le premier à le déchiffrer.</p>
+    <div class="cta">
+      <a class="btn" href="#" data-app>Commencer à jouer</a>
+      <a class="btn ghost" href="#comment">Voir comment ça marche</a>
+    </div>
+    <div class="code" aria-hidden="true">
+      <div class="slot">?</div><div class="slot">?</div><div class="slot">?</div><div class="slot">?</div>
+    </div>
+    <p class="code-note">Disponible sur mobile et sur le web</p>
+  </div>
+
+  <section id="comment">
+    <div class="wrap">
+      <h2>Comment jouer</h2>
+      <p class="sub">Trois étapes, et tu es dans la partie.</p>
+      <div class="grid three">
+        <div class="card"><span class="num">01</span><h3>Crée ton compte</h3><p>Inscris-toi en quelques secondes avec ton numéro de téléphone.</p></div>
+        <div class="card"><span class="num">02</span><h3>Lis les indices</h3><p>Chaque partie propose des indices pour t’aider à cerner le code secret.</p></div>
+        <div class="card"><span class="num">03</span><h3>Trouve le code</h3><p>Entre les 4 chiffres. Si c’est le bon, la récompense est pour toi.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="avantages">
+    <div class="wrap">
+      <h2>Pourquoi jouer ici</h2>
+      <div class="grid two">
+        <div class="card"><h3>Des indices à résoudre</h3><p>Pas de hasard pur : c’est ta logique qui fait la différence.</p></div>
+        <div class="card"><h3>Sur ton téléphone</h3><p>Ouvre le jeu dans ton navigateur ou installe-le comme une application.</p></div>
+        <div class="card"><h3>Paiement mobile</h3><p>Dépose avec les moyens de paiement mobile de ton pays.</p></div>
+        <div class="card"><h3>Une assistante, Eve</h3><p>Une question sur le jeu ? Eve te répond dans l’application.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="paiement">
+    <div class="wrap">
+      <h2>Moyens de paiement</h2>
+      <p class="sub">Les options affichées dans l’application dépendent de ton pays.</p>
+      <div class="chips">
+        <span class="chip">Wave</span>
+        <span class="chip">Orange Money</span>
+        <span class="chip">MTN Money</span>
+        <span class="chip">Moov Money</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="faq">
+    <div class="wrap">
+      <h2>Questions fréquentes</h2>
+      <div class="faq">
+        <details><summary>C’est quoi, DEVINE LE CODE ?</summary><p>Un jeu où tu dois deviner un code secret à 4 chiffres à l’aide d’indices. Si tu le trouves, tu gagnes la récompense de la partie.</p></details>
+        <details><summary>Comment je m’inscris ?</summary><p>Avec ton numéro de téléphone, directement dans l’application. L’inscription par téléphone est ouverte aux pays d’Afrique de l’Ouest.</p></details>
+        <details><summary>Comment je dépose de l’argent ?</summary><p>Par Wave ou par Orange Money, MTN Money et Moov Money, selon ton pays. Tout se fait depuis ton compte.</p></details>
+        <details><summary>J’ai une question, qui contacter ?</summary><p>Demande à Eve, l’assistante du jeu, ou écris-nous sur WhatsApp avec le bouton ci-dessous.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <section class="final">
+    <div class="wrap">
+      <h2>Prêt à trouver le code ?</h2>
+      <p class="sub" style="margin-inline:auto">Rejoins la partie et mets ta logique à l’épreuve.</p>
+      <div class="cta">
+        <a class="btn" href="#" data-app>Jouer maintenant</a>
+        <a class="btn ghost" href="#" data-whatsapp>Nous écrire sur WhatsApp</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <span>© <span id="year"></span> DEVINE LE CODE. Réservé aux personnes majeures. Joue de façon responsable.</span>
+      <nav aria-label="Liens légaux">
+        <a href="#" data-cgu>Conditions d’utilisation</a>
+        <a href="#" data-privacy>Confidentialité</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // ⚙️ À modifier : mets tes vrais liens ici
+  const CONFIG = {
+    appUrl: "#",                 // lien vers ton jeu (ex : http://ton-adresse/ ou ton domaine)
+    whatsapp: "",                // numéro au format international sans + (ex : 2250700000000)
+    cgu: "#",                    // lien vers tes conditions d'utilisation
+    privacy: "#"                 // lien vers ta politique de confidentialité
+  };
+
+  document.querySelectorAll("[data-app]").forEach(a => a.href = CONFIG.appUrl);
+  document.querySelectorAll("[data-cgu]").forEach(a => a.href = CONFIG.cgu);
+  document.querySelectorAll("[data-privacy]").forEach(a => a.href = CONFIG.privacy);
+  document.querySelectorAll("[data-whatsapp]").forEach(a => {
+    if (CONFIG.whatsapp) a.href = "https://wa.me/" + CONFIG.whatsapp;
+    else a.style.display = "none";
+  });
+  document.getElementById("year").textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
