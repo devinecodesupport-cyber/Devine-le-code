@@ -126,7 +126,7 @@
 
 <header>
   <div class="wrap bar">
-    <a class="logo" href="#top">DEVINE <b>LE CODE</b></a>
+    <a class="logo" translate="no" href="#top">DEVINE <b>LE CODE</b></a>
     <nav aria-label="Navigation principale">
       <a href="#comment">Comment jouer</a>
       <a href="#avantages">Avantages</a>
@@ -193,7 +193,7 @@
     <div class="wrap">
       <h2>Questions fréquentes</h2>
       <div class="faq">
-        <details><summary>C’est quoi, DEVINE LE CODE ?</summary><p>Un jeu où tu dois deviner un code secret à 4 chiffres à l’aide d’indices. Si tu le trouves, tu gagnes la récompense de la partie.</p></details>
+        <details><summary>C’est quoi, <span translate="no">DEVINE LE CODE</span> ?</summary><p>Un jeu où tu dois deviner un code secret à 4 chiffres à l’aide d’indices. Si tu le trouves, tu gagnes la récompense de la partie.</p></details>
         <details><summary>Comment je m’inscris ?</summary><p>Avec ton numéro de téléphone, directement dans l’application. L’inscription par téléphone est ouverte aux pays d’Afrique de l’Ouest.</p></details>
         <details><summary>Comment je dépose de l’argent ?</summary><p>Par Wave ou par Orange Money, MTN Money et Moov Money, selon ton pays. Tout se fait depuis ton compte.</p></details>
         <details><summary>J’ai une question, qui contacter ?</summary><p>Demande à Eve, l’assistante du jeu, ou écris-nous sur WhatsApp avec le bouton ci-dessous.</p></details>
@@ -216,7 +216,7 @@
 <footer>
   <div class="wrap">
     <div class="foot">
-      <span>© <span id="year"></span> DEVINE LE CODE. Réservé aux personnes majeures. Joue de façon responsable.</span>
+      <span>© <span id="year"></span> <span translate="no">DEVINE LE CODE</span>. Réservé aux personnes majeures. Joue de façon responsable.</span>
       <nav aria-label="Liens légaux">
         <a href="#" data-cgu>Conditions d’utilisation</a>
         <a href="#" data-privacy>Confidentialité</a>
@@ -230,8 +230,8 @@
   const CONFIG = {
     appUrl: "#",                 // lien vers ton jeu (ex : http://ton-adresse/ ou ton domaine)
     whatsapp: "2250555776998",                // numéro au format international sans + (ex : 2250700000000)
-    cgu: "#",                    // lien vers tes conditions d'utilisation
-    privacy: "#"                 // lien vers ta politique de confidentialité
+    cgu: "cgu.html",                    // lien vers tes conditions d'utilisation
+    privacy: "confidentialite.html"                 // lien vers ta politique de confidentialité
   };
 
   document.querySelectorAll("[data-app]").forEach(a => a.href = CONFIG.appUrl);
